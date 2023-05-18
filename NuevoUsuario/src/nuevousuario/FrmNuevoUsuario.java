@@ -1,4 +1,3 @@
-
 package nuevousuario;
 
 import javax.swing.JOptionPane;
@@ -9,14 +8,14 @@ public class FrmNuevoUsuario extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    
-    private void nuevoUsuario(){
+
+    private void nuevoUsuario() {
         if (!txtNombres.getText().isEmpty() && !txtApellidos.getText().isEmpty()
                 && !txtCorreo.getText().isEmpty() && !txtPassword.getText().isEmpty()
                 && txtPassword.getText().equals(txtRepetirPassword.getText())) {
 
-            Usuario usuario = new Usuario(txtNombres.getText(), txtApellidos.getText(), txtCorreo.getText(),
-                    txtPassword.getText());
+            Usuario usuario = new Usuario(txtNombres.getText(), txtApellidos.getText(),
+                    txtCorreo.getText(), txtPassword.getText());
 
             if (Bean.nuevoUsuario(usuario)) {
                 JOptionPane.showMessageDialog(this, "Usuario guardado");
@@ -27,6 +26,52 @@ public class FrmNuevoUsuario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Hay campos vacíos o las contraseñas no coinciden");
         }
     }
+
+    private void modificarUsuario() {
+        if (!txtNombres.getText().isEmpty() && !txtApellidos.getText().isEmpty()
+                && !txtCorreo.getText().isEmpty() && !txtPassword.getText().isEmpty()
+                && txtPassword.getText().equals(txtRepetirPassword.getText())) {
+
+            Usuario usuario = new Usuario(txtNombres.getText(), txtApellidos.getText(),
+                    txtCorreo.getText(), txtPassword.getText());
+
+            if (Bean.modificarUsuario(usuario)) {
+                JOptionPane.showMessageDialog(this, "Usuario modificado con éxito");
+            } else {
+                JOptionPane.showMessageDialog(this, "Error, usuario no encontrado");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Hay campos vacíos o las contraseñas no coinciden");
+        }
+    }
+
+    private void eliminarUsuario() {
+        if (!txtCorreo.getText().isEmpty()) {
+
+            if (Bean.eliminarUsuario(txtCorreo.getText())) {
+                JOptionPane.showMessageDialog(this, "Usuario eliminado con éxito");
+            } else {
+                JOptionPane.showMessageDialog(this, "Error, usuario no encontrado");
+            }
+        }
+    }
+    
+    private void buscarUsuario() {
+        if (!txtCorreo.getText().isEmpty()) {
+
+            if (Bean.consultarUsuario(txtCorreo.getText())) {
+                JOptionPane.showMessageDialog(this, "Usuario encontrado con éxito "
+                + "\n" + "Nombre(s): " + Bean.obtenerUsuario(txtCorreo.getText()).getNombres()
+                + "\n" + "Apellidos: " + Bean.obtenerUsuario(txtCorreo.getText()).getApellidos()
+                + "\n" + "Correo: " + Bean.obtenerUsuario(txtCorreo.getText()).getCorreo());
+                
+            } else {
+                JOptionPane.showMessageDialog(this, "Error, usuario no encontrado");
+            }
+        }
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,6 +94,9 @@ public class FrmNuevoUsuario extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         txtRepetirPassword = new javax.swing.JPasswordField();
         btnAceptar = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -66,10 +114,31 @@ public class FrmNuevoUsuario extends javax.swing.JFrame {
 
         jLabel6.setText("Repetir clave:");
 
-        btnAceptar.setText("Aceptar");
+        btnAceptar.setText("Nuevo");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAceptarActionPerformed(evt);
+            }
+        });
+
+        btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
             }
         });
 
@@ -77,30 +146,38 @@ public class FrmNuevoUsuario extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(151, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(146, 146, 146))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtNombres)
-                    .addComponent(txtApellidos)
-                    .addComponent(txtCorreo)
-                    .addComponent(txtPassword)
-                    .addComponent(txtRepetirPassword))
-                .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtNombres)
+                            .addComponent(txtApellidos)
+                            .addComponent(txtCorreo)
+                            .addComponent(txtPassword)
+                            .addComponent(txtRepetirPassword))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(146, 146, 146))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(160, 160, 160)
+                .addGap(43, 43, 43)
                 .addComponent(btnAceptar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnModificar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEliminar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnBuscar)
+                .addGap(0, 44, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,9 +204,13 @@ public class FrmNuevoUsuario extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txtRepetirPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addComponent(btnAceptar)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModificar)
+                    .addComponent(btnAceptar)
+                    .addComponent(btnEliminar)
+                    .addComponent(btnBuscar))
+                .addGap(29, 29, 29))
         );
 
         pack();
@@ -139,6 +220,18 @@ public class FrmNuevoUsuario extends javax.swing.JFrame {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         nuevoUsuario();
     }//GEN-LAST:event_btnAceptarActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        modificarUsuario();
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        eliminarUsuario();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        buscarUsuario();
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,6 +271,9 @@ public class FrmNuevoUsuario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

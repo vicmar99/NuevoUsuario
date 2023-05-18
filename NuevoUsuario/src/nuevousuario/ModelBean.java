@@ -22,12 +22,43 @@ public class ModelBean {
         return n;
     }
 
-    public boolean save(Usuario usuario) {
+    public boolean nuevoUsuario(Usuario usuario) {
         if (buscar(usuario.getCorreo()) == -1) {
             usuarios.add(usuario);
             return true;
         } else {
             return false;
+        }
+    }
+
+    public boolean modificarUsuario(Usuario usuario) {
+        if (buscar(usuario.getCorreo()) != -1) {
+            Usuario usuarioMod = obtenerUsuario(usuario.getCorreo());
+
+            usuarioMod.setPassword(usuario.getPassword());
+            usuarioMod.setNombres(usuario.getNombres());
+            usuarioMod.setApellidos(usuario.getApellidos());
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean eliminarUsuario(String usuario) {
+        if (buscar(usuario) != -1) {
+            usuarios.remove(buscar(usuario));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Usuario obtenerUsuario(String usuario) {
+        if (buscar(usuario) != -1) {
+            return usuarios.get(buscar(usuario));
+        } else {
+            return null;
         }
     }
 }
